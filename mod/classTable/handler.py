@@ -57,32 +57,6 @@ class ClassHandler(tornado.web.RequestHandler):
                         retjson['content'] = 'card number not exist'
                     else:
                         retjson['content'] = self.parser(body)
-                if date != "-1":
-                    url = "http://58.192.114.179/classroom/common/getdateofweek?date="+date
-                    client = AsyncHTTPClient()
-                    request = HTTPRequest(
-                        url = url,
-                        method = "GET",
-                        request_timeout=TIME_OUT
-                    )
-                    response = yield tornado.gen.Task(client.fetch, request)
-                    retjson['week'] = json.loads(response.body)
-                url = "http://58.192.114.179/classroom/common/gettermlistex"
-                client = AsyncHTTPClient()
-                request = HTTPRequest(
-                    url = url,
-                    method = "GET",
-                    request_timeout=TIME_OUT
-                )
-                response = yield tornado.gen.Task(client.fetch, request)
-                content = json.loads(response.body)
-                retjson['content']['startdate']={}
-                termTemp = term.split('-')
-                term = "20"+termTemp[0]+"-"+"20"+termTemp[1]+"-"+termTemp[2]
-                for i in content:
-                    if i['code'] == term:
-                        retjson['content']['startdate']['month'] = i['startDate']['month']
-                        retjson['content']['startdate']['day'] = i['startDate']['date']
             except Exception,e:
                 retjson['code'] = 500
                 retjson['week'] = u'系统错误'
