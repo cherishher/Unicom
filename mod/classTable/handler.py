@@ -14,6 +14,7 @@ import requests
 import urllib
 import json
 import re
+import time
 
 class ClassHandler(tornado.web.RequestHandler):
 
@@ -57,12 +58,15 @@ class ClassHandler(tornado.web.RequestHandler):
                         retjson['content'] = 'card number not exist'
                     else:
                         retjson['content'] = self.parser(body)
+
             except Exception,e:
+                print str(e)
                 retjson['code'] = 500
                 retjson['week'] = u'系统错误'
 
         self.write(json.dumps(retjson, ensure_ascii=False, indent=2))
         self.finish()
+
 
     def parser(self, html):
         soup = BeautifulSoup(html)
@@ -70,23 +74,23 @@ class ClassHandler(tornado.web.RequestHandler):
         table += soup.findAll('td', rowspan='2')
         self.course_split(table[1])
         curriculum = OrderedDict()
-        curriculum['Mon'] = self.course_split(table[1]) + \
+        curriculum[1] = self.course_split(table[1]) + \
             self.course_split(table[7]) + \
             self.course_split(table[13])
-        curriculum['Tue'] = self.course_split(table[2]) + \
+        curriculum[2] = self.course_split(table[2]) + \
             self.course_split(table[8]) + \
             self.course_split(table[14])
-        curriculum['Wed'] = self.course_split(table[3]) + \
+        curriculum[3] = self.course_split(table[3]) + \
             self.course_split(table[9]) + \
             self.course_split(table[15])
-        curriculum['Thu'] = self.course_split(table[4]) + \
+        curriculum[4] = self.course_split(table[4]) + \
             self.course_split(table[10]) + \
             self.course_split(table[16])
-        curriculum['Fri'] = self.course_split(table[5]) + \
+        curriculum[5] = self.course_split(table[5]) + \
             self.course_split(table[11]) + \
             self.course_split(table[17])
-        curriculum['Sat'] = self.course_split(table[19])
-        curriculum['Sun'] = self.course_split(table[21])
+        curriculum[6] = self.course_split(table[19])
+        curriculum[0] = self.course_split(table[21])
 
         return curriculum
 

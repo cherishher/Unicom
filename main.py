@@ -6,6 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from mod.models.db import engine
 from mod.classTable.handler import ClassHandler
 from mod.tuling.handler import TulingHandler
+from mod.schoolbus.handler import SchoolBusHandler
 import tornado.web
 import tornado.ioloop
 import tornado.options
@@ -20,7 +21,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/wechat/class', ClassHandler),
-            (r'/wechat/tuling',TulingHandler)
+            (r'/wechat/tuling',TulingHandler),
+            (r'/wechat/schoolbus',SchoolBusHandler)
         ]
         settings = dict(
             cookie_secret="7CA71A57B571B5AEAC5E64C6042415DE",
