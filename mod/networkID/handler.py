@@ -8,7 +8,7 @@ from tornado.httpclient import HTTPRequest, AsyncHTTPClient
 import tornado.web
 import tornado.gen
 import json
-from models.networkID import networkID
+from mod.models.networkID import networkID
 
 class NetworkIDHandler(tornado.web.RequestHandler):
 
