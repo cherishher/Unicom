@@ -26,12 +26,11 @@ class NetworkIDHandler(tornado.web.RequestHandler):
 		retjson = {'code':200, 'content':'null'}
 		try:
 			user = self.db.query(networkID).filter(networkID.useid == userid).first()
-			time = user.time
 			if user == None:
 				retjson = {'code':400,'content':''}
 			else:
-				if time > 0:
-					retjson = {'code':200,'content':{'wiredid':user.wiredid,'wirelessid':user.wirelessid,'time':user.time}}
+				if user.time > 0:
+					retjson = {'code':200,'wiredid':user.wiredid,'wirelessid':user.wirelessid,'time':user.time}
 					user.time -= 1
 					self.db.commit()
 				else:
