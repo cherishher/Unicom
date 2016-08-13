@@ -23,13 +23,19 @@ class NetworkIDHandler(tornado.web.RequestHandler):
 	@tornado.gen.engine#没有的话，yield方法会报错！！！！boom~！
 	def post(self):
 		userid = self.get_argument('cardnum',default=-1)
-		retjson = {'code':200, 'retid':'null'}
+		retjson = {'code':200, 'content':'null'}
 		try:
 			user = self.db.query(networkID).filter(networkID.useid == userid).first()
+			time = user.time
 			if user == None:
-				retjson = {'code':400,'retid':''}
+				retjson = {'code':400,'content':''}
 			else:
-				retjson = {'code':200,'retid':user.networkid}
+				if time > 0:
+					retjson = {'code':200,'content':{'wiredid':user.wiredid,'wirelessid':user.wirelessid,'time':user.time}}
+					user.time -= 1
+					self.db.commit()
+				else:
+					retjson =  {'code':401,'content':'调用次数已用完'}
 		except Exception,e:
 			print str(e)#有问题时打印一下看看
 			retjson['code'] = 500
