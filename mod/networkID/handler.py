@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Date    : 2016/8/11  18:13
 # @Author  : 490949611@qq.com
-
-
+import traceback
 
 from tornado.httpclient import HTTPRequest, AsyncHTTPClient
 import tornado.web
@@ -36,7 +35,8 @@ class NetworkIDHandler(tornado.web.RequestHandler):
 				else:
 					retjson =  {'code':401,'content':'调用次数已用完'}
 		except Exception,e:
-			print str(e)#有问题时打印一下看看
+			traceback.print_exc()
+			# print str(e)#有问题时打印一下看看
 			retjson['code'] = 500
 			retjson['retinfo'] = 'error'
 		self.write(json.dumps(retjson,ensure_ascii=False,indent=2))
